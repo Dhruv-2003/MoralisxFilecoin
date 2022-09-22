@@ -12,6 +12,7 @@ Artist3 is a NFT marketplace for digital artists using which artists can mint th
 - Buy tokens/fractions of the NFTs and NFTs at the same platfor
 
 Live link : http://artist3.vercel.app/
+
 Valist Link : https://bafybeic5z2trdbiagegle63ygi7oy7ktulzivejhygpnhiee5i77cudhtm.ipfs.gateway.valist.io/
 
 Demo Link : https://youtu.be/eD5n2WlrSpw
