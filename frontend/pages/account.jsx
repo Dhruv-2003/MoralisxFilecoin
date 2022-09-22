@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import styles from "../styles/Home.module.css";
 import OwnNFT from "../src/components/OwnNFT";
 import Activefraction from "../src/components/activeFractional";
-import { Network, Alchemy } from "alchemy-sdk";
 import { NFT_Contract_adddress } from "../src/constants";
 import { useProvider, useSigner, useContract, useAccount } from "wagmi";
 import {
@@ -11,12 +10,14 @@ import {
   Token_abi,
 } from "../src/constants";
 import { Contract } from "ethers";
-const settings = {
-  apiKey: "bZFiL-IFAMe4QAh9Q30gDQ7m1vxEss4u", // Replace with your Alchemy API Key.
-  network: Network.MATIC_MUMBAI, // Replace with your network.
-};
+import Moralis from "moralis";
+import { EvmChain } from "@moralisweb3/evm-utils";
 
-const alchemy = new Alchemy(settings);
+const chain = EvmChain.MUMBAI;
+
+await Moralis.start({
+  apiKey: process.env.MORALIS_API_KEY,
+});
 
 export default function Account() {
   const [nfts, setNfts] = useState([]);
@@ -40,9 +41,11 @@ export default function Account() {
   const fetchNFTs = async () => {
     try {
       console.log("fetching the NFTs");
-      // fetch with metadata
-      const nftsForOwner = await alchemy.nft.getNftsForOwner(address, {
-        withMetadata: true,
+
+      // fetch with metadata from moralis
+      const nftsForOwner = await Moralis.EvmApi.nft.getWalletNFTs({
+        address,
+        chain,
       });
       const filteredNFTs = [];
       for (const nft of nftsForOwner.ownedNfts) {

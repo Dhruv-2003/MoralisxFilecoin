@@ -21,6 +21,16 @@ import { useRouter } from "next/router";
 //   useContractWrite,
 // } from "@thirdweb-dev/react";
 
+import Moralis from "moralis";
+import { EvmChain } from "@moralisweb3/evm-utils";
+
+const chain = EvmChain.MUMBAI;
+
+await Moralis.start({
+  apiKey: process.env.MORALIS_API_KEY,
+  // ...and any other configuration
+});
+
 export default function NFT(props) {
   // buy nft
 
@@ -81,7 +91,11 @@ export default function NFT(props) {
 
   const fetchTokenData = async () => {
     try {
-      const response = await NFT_Contract.tokenURI(tokenId);
+      const response = await Moralis.EvmApi.nft.getNFTMetadata({
+        NFT_Contract_adddress,
+        chain,
+        tokenId,
+      });
       console.log(response);
       /// filter the NFT URI from the link and then
 

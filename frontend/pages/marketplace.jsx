@@ -11,6 +11,15 @@ import {
 import { isAddress } from "ethers/lib/utils";
 import { useProvider, useSigner, useContract, useAccount } from "wagmi";
 import { Contract, ethers } from "ethers";
+import Moralis from "moralis";
+import { EvmChain } from "@moralisweb3/evm-utils";
+
+const chain = EvmChain.MUMBAI;
+
+await Moralis.start({
+  apiKey: process.env.MORALIS_API_KEY,
+  // ...and any other configuration
+});
 
 export default function Marketplace() {
   const [toggleState, setToggleState] = useState(1);
@@ -86,7 +95,11 @@ export default function Marketplace() {
       const total_ = parseInt(_total.hex._value);
 
       // filter the address first
-      const { response } = useContractRead(NFT_contract, "tokenURI", tokenId);
+      const response = await Moralis.EvmApi.nft.getNFTMetadata({
+        NFT_Contract_adddress,
+        chain,
+        tokenId,
+      });
       console.log(response);
       /// filter the NFT URI from the link and then
 
@@ -158,7 +171,11 @@ export default function Marketplace() {
       const _price = await Token_Contract.salePrice();
       const price_ = parseInt(_price.hex._value);
       // filter the address first
-      const { response } = useContractRead(NFT_contract, "tokenURI", tokenId);
+      const response = await Moralis.EvmApi.nft.getNFTMetadata({
+        NFT_Contract_adddress,
+        chain,
+        tokenId,
+      });
       console.log(response);
       /// filter the NFT URI from the link and then
       const metadata = await fetch(tokenURI);
